@@ -3,9 +3,13 @@ import "package:booktickets/model/todo.dart";
 import "package:booktickets/widgets/todo_item.dart";
 import "package:flutter/material.dart";
 
-class Home extends StatelessWidget {
-  // const Home({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  @override
+  State<Home> createState() => _HomeState();
+}
 
+class _HomeState extends State<Home> {
+  // const Home({Key? key}) : super(key: key);
   final todosList = ToDo.todoList();
 
   @override
@@ -35,6 +39,8 @@ class Home extends StatelessWidget {
                       for (ToDo todo in todosList)
                         TodoItem(
                           todo: todo,
+                          onToDoChanged: _handleToDoChange,
+                          onDeleteItem: _deleteToDoItem,
                         ),
                     ],
                   ),
@@ -71,7 +77,7 @@ class Home extends StatelessWidget {
                     ),
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: 'Add a new ToDo item',
+                        hintText: 'Add a new todo  item',
                         border: InputBorder.none,
                       ),
                     ),
@@ -103,6 +109,18 @@ class Home extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _handleToDoChange(ToDo todo) {
+    setState(() {
+      todo.isDone = !todo.isDone;
+    });
+  }
+
+  void _deleteToDoItem(String id) {
+    setState(() {
+      todosList.removeWhere((item) => item.id == id);
+    });
   }
 
   Widget searchBox() {
